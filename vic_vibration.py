@@ -1,15 +1,3 @@
-'''
-import requests
-
-url = "https://raw.githubusercontent.com/username/repository/branch/path/to/vice_functions.py"
-response = requests.get(url)
-
-with open("vice_functions.py", "w") as f:
-    f.write(response.text)
-
-# Now you can import from the downloaded file
-from vice_functions import *
-'''
 def integrate_rotation(signal,sample_rate):
     integrated=[0 for i in range(len(signal))]
     for i in range(1,len(signal)):
