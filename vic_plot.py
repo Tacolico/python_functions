@@ -29,10 +29,10 @@ def config():
           'axes.ymargin'            : 0,
           'figure.dpi'              : 300.0,
           'figure.figsize'          :[15/2.54,9*15/16/2.54],
-          'figure.subplot.bottom'   :16/15*1/6,
-          'figure.subplot.left'     : 1/6,
-          'figure.subplot.right'    : 1-16/15*0.075,
-          'figure.subplot.top'      : 1-16/15*0.1,
+          'figure.subplot.bottom'   :   16/15*1/6,
+          'figure.subplot.left'     :   16/15*20/48,
+          'figure.subplot.right'    : 1-16/15*1/24,
+          'figure.subplot.top'      : 1-16/15*1/12,
           'figure.titlesize'        : 'medium',
           'figure.titleweight'      : 'bold',
           'font.family'             : 'monospace',
@@ -45,14 +45,15 @@ def config():
           'grid.linewidth'          : 0.8,
           'hatch.color'             : 'black',
           'legend.borderaxespad'    : 0,
-          'legend.borderpad'        : 0.2,
+          'legend.borderpad'        : 0,
           'legend.edgecolor'        : '1',
           'legend.facecolor'        : 'white',
           'legend.fancybox'         : False,
           'legend.fontsize'         : 'medium',
-          'legend.framealpha'       : 1,
-          'legend.frameon'          : True,
+          'legend.framealpha'       : 0,
+          'legend.frameon'          : False,
           'legend.loc'              : 'upper right',
+          'legend.title_fontsize'   : 'medium',
           'lines.linewidth'         : 1.5,
           'lines.markeredgecolor'   : 'black',
           'lines.markeredgewidth'   : 1,
@@ -64,4 +65,9 @@ def config():
           'xtick.labelsize'         : 'medium',
           'ytick.labelsize'         : 'medium',
         })
-    return plt
+    fig, ax = plt.subplots()
+    return fig, ax
+def title(fig,TITLE):
+    fig.suptitle(TITLE, x=0, y=1, ha='left')
+    fig.legend(loc='outside upper left',bbox_to_anchor=(0,1-1/12))
+    return fig
