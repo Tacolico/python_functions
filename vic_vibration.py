@@ -58,28 +58,23 @@ def fft_lh_plot(
     top_five_indices = np.argpartition(absolute_data, -5)[-5:]
     # Plot configuration
     import vic_plot
-    vic_plot.config()
+    fig,ax=vic_plot.config()
     # 
-    plt.plot(freq,absolute_data,label=label,linewidth=0)
-    plt.vlines(freq,[0 for i in freq],absolute_data)
+    ax.plot(freq,absolute_data,label=label,linewidth=0)
+    ax.vlines(freq,[0 for i in freq],absolute_data)
     for index in top_five_indices:
-        plt.annotate(f'{freq[index]:.0f}', (freq[index], absolute_data[index]), textcoords="offset points", xytext=(0,5), ha='center')
-    plt.title(f"FFT, sample frequency = {sample_rate} Hz") 
-    plt.legend()
-    ax = plt.gca()
-    max_y = np.max(ax.lines[0].get_ydata())
-    plt.ylim([None,max_y*1.1])
-    plt.xlim([low_filter,high_filter])
-    plt.xlabel('Frequency [Hz]')
-    plt.ylabel(f'Amplitude [{units}]')
+        ax.annotate(f'{freq[index]:.0f}', (freq[index], absolute_data[index]), textcoords="offset points", xytext=(0,5), ha='center')
+    vice_plot.title(fig,f"FFT, sample frequency = {sample_rate} Hz") 
+    ax.set_xlabel('Frequency [Hz]')
+    ax.set_ylabel(f'Amplitude [{units}]')
     if path != None:
         # Navigate folders
         import vic_nav
         #
         vic_nav.new_folder(path)
-        plt.savefig(path+"/"+name.lower().replace(" ","_")+'.png')
+        fig.savefig(path+"/"+name.lower().replace(" ","_")+'.png')
     if path == None:
-        plt.savefig(name.lower().replace(" ","_")+'.png')
+        fig.savefig(name.lower().replace(" ","_")+'.png')
     plt.close('all')
     plt.rcdefaults()
 
