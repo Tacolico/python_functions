@@ -25,11 +25,11 @@ def fft_lh_filter(
     delta_time    = 1/sample_rate
     duration      = signal_sample * delta_time
     if low_filter is not None:
-        lfilter = int(duration * low_filter) + (duration * low_filter > 0)
+        lfilter = int(duration * low_filter ) + 1*((duration * low_filter )%1 > 0)
     else:
         lfilter=None
     if high_filter is not None:
-        hfilter = int(duration * high_filter) + (duration * high_filter > 0)
+        hfilter = int(duration * high_filter) + 1*((duration * high_filter)%1 > 0)
     else:
         hfilter=None
     signal_fft                  = rfft(signal)
