@@ -60,7 +60,7 @@ def config():
           'lines.markersize'        : 5.0,
           'markers.fillstyle'       : 'none',
           'savefig.format'          : 'png',
-          'savefig.transparent'     : True,
+          'savefig.transparent'     : False,
           'text.antialiased'        : True,
           'xtick.labelsize'         : 'medium',
           'ytick.labelsize'         : 'medium',
@@ -68,6 +68,6 @@ def config():
     fig, ax = plt.subplots()
     return fig, ax
 def title(fig,TITLE):
-    fig.suptitle(TITLE, x=0.01, y=1, ha='left')
+    fig.suptitle(TITLE, x=0.01, y=0.99, ha='left')
     fig.legend(loc='outside upper right',bbox_to_anchor=(0.99,1-1/12))
     return fig
