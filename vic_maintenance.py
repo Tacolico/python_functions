@@ -5,6 +5,7 @@ def weibull_reliability(
         plot        = True,
         name        = None,
         failure     = None,
+        path        = None,
         ):
     from scipy.stats import kstest, weibull_min
     import numpy as np
@@ -51,7 +52,13 @@ def weibull_reliability(
                         xytext=(op , 0),
                         arrowprops=dict( linestyle='--', arrowstyle='-'),
                         ha='center', va='bottom' )
-        vic_plot.savefig(fig,"Reliability"+plot_name.replace(" | ","_").replace(" ","_")+"_Weibull.png")
+        plot_name="Reliability"+plot_name.replace(" | ","_").replace(" ","_")+"_Weibull.png"
+        if path != None:
+            import vic_nav
+            vic_nav.new_folder(path)
+            vic_plot.savefig(fig,path+"/"+plot_name)
+        if path == None:
+            vic_plot.savefig(fig,plot_name)
     return op
 
 if __name__ =="__main__":
@@ -100,4 +107,5 @@ if __name__ =="__main__":
             plot=True,
             name="Machine 123-456",
             failure="broken theet",
+            path="lol"
             )
