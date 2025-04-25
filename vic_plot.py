@@ -1,4 +1,8 @@
-def config(): 
+def config(
+        title=None,
+        x_label=None,
+        y_label=None
+        ):
     from cycler import cycler
     import matplotlib.pyplot as plt
     marker_color = [
@@ -32,7 +36,7 @@ def config():
           'figure.subplot.bottom'   :   16/15*1/6,
           'figure.subplot.left'     :   16/15*3/24,
           'figure.subplot.right'    : 1-16/15*1/3,
-          'figure.subplot.top'      : 1-16/15*1/12,
+          'figure.subplot.top'      : 1-16/15*5/48,
           'figure.titlesize'        : 'medium',
           'figure.titleweight'      : 'bold',
           'font.family'             : 'monospace',
@@ -66,8 +70,19 @@ def config():
           'ytick.labelsize'         : 'medium',
         })
     fig, ax = plt.subplots()
+    fig.suptitle(title, x=0.01, y=0.99, ha='left',va='top')
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
     return fig, ax
+
+def savefig(figure,name):
+    import matplotlib.pyplot as plt
+    figure.legend(loc='upper left',bbox_to_anchor=(1-16/15*1/3,1-16/15*5/48))
+    figure.savefig(name)
+
 def title(fig,TITLE):
+    # Deprecated
+    import matplotlib.pyplot as plt
     fig.suptitle(TITLE, x=0.01, y=0.99, ha='left')
-    fig.legend(loc='outside upper right',bbox_to_anchor=(0.99,1-1/12))
+    fig.legend(loc='upper left',bbox_to_anchor=(1-16/15*1/3,1-16/15*5/48))
     return fig
