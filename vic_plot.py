@@ -33,9 +33,9 @@ def config(
           'axes.ymargin'            : 0,
           'figure.dpi'              : 300.0,
           'figure.figsize'          :[15/2.54,9*15/16/2.54],
-          'figure.subplot.bottom'   :   16/15*1/6,
+          'figure.subplot.bottom'   :   16/15*2/6,
           'figure.subplot.left'     :   16/15*3/24,
-          'figure.subplot.right'    : 1-16/15*1/3,
+          'figure.subplot.right'    : 1-16/15*1/3-0.03,
           'figure.subplot.top'      : 1-16/15*5/48,
           'figure.titlesize'        : 'medium',
           'figure.titleweight'      : 'bold',
@@ -79,6 +79,7 @@ def savefig(figure,name):
     import matplotlib.pyplot as plt
     figure.legend(loc='upper left',bbox_to_anchor=(1-16/15*1/3,1-16/15*5/48))
     figure.savefig(name)
+    plt.close()
 
 def title(fig,TITLE):
     # Deprecated
