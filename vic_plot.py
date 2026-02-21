@@ -1,3 +1,12 @@
+'''
+fix, ax =vic_plot.config(
+        title=None,
+        x_label=None,
+        y_label=None
+        )
+ax.plot(x_data,y_data,label="Label")
+vic_plot.savefig(fig,"Figure.png")
+'''
 def config(
         title=None,
         x_label=None,

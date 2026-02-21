@@ -122,7 +122,6 @@ def pareto_plot(
             vic_plot.savefig(fig,path+"/"+save_title+".png")
     return df
 
-import pandas as pd
 if __name__ =="__main__":
     import pandas as pd
     from io import StringIO
@@ -143,7 +142,7 @@ if __name__ =="__main__":
     weibull_reliability(
             x_data=df['Work done [km]'].values,
             x_unit="[km]",
-            reliability=0.95,
+            reliability=0.8,
             plot=True,
             name="Machine 123-456",
             failure="broken theet",

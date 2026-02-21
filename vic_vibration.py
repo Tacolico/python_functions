@@ -1,3 +1,23 @@
+'''
+def fft_lh_plot(
+    path        = None,
+    name        = "Random wave file",
+    label       = "Random wave label",
+    units       = "Un",
+    signal      = None,
+    sample_rate = None,
+    low_filter  = None,
+    high_filter = None,
+    )
+
+y_data=fft_lh_filter(
+    signal      = None,
+    sample_rate = None,
+    low_filter  = None,
+    high_filter = None,
+    )
+x_data=[i*sample_rate for i in range(len(y_data))]
+'''
 def integrate_rotation(signal,sample_rate):
     integrated=[0 for i in range(len(signal))]
     for i in range(1,len(signal)):
