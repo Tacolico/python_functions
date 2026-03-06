@@ -1,19 +1,21 @@
-from math import sin, tan, asin, pi,sqrt,acos
+# Fluid Mechanics Thermodynamics of Turbomachine (S.L. Dixon).pdf
 
 def h_tank_vol(L,r,R,h,b):
+    from math import sin, tan, asin, pi,sqrt,acos
     if b < -r or b > r:
         exit("Domain error -r,r")
-    #L= Tank cylinder length
-    #r= Internal cylinder radius
-    #R= End cap radius
-    #h= End cap height (Tank lenght/2 - r/2)
-    #b= Liquid height from centerline (-r,r)
+    # L = Tank cylinder length [M]
+    # r = Internal cylinder radius [M]
+    # R = End cap radius [M]
+    # h = End cap height (Tank lenght/2 - r/2) [M]
+    # b = Liquid height from centerline (-r,r) [M]
     A=2*pow(h,2)*(R-h/3)+pow(r,2)*L
     B=pi/2-asin(b/r)
     C=-pow(b,2)*(L+2*h)/tan(asin(b/r))
     return (A*B+C)
 
 if __name__ == "__main__":
+    from math import sin, tan, asin, pi,sqrt,acos
     import matplotlib.pyplot as plt
     import numpy as np
     R=1.27 # Sphere radius
