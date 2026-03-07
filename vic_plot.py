@@ -1,5 +1,5 @@
 '''
-fix, ax =vic_plot.config(
+fig, ax =vic_plot.config(
         title=None,
         x_label=None,
         y_label=None
