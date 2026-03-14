@@ -5,7 +5,7 @@ fig, ax =vic_plot.config(
         y_label=None
         )
 ax.plot(x_data,y_data,label="Label")
-vic_plot.savefig(fig,"Figure.png")
+vic_plot.savefig(fig,"Figure")
 '''
 def config(
         title=None,
@@ -42,7 +42,7 @@ def config(
           'axes.ymargin'            : 0,
           'figure.dpi'              : 300.0,
           'figure.figsize'          :[15/2.54,9*15/16/2.54],
-          'figure.subplot.bottom'   :   16/15*2/6,
+          'figure.subplot.bottom'   :   16/15*1/6,
           'figure.subplot.left'     :   16/15*3/24,
           'figure.subplot.right'    : 1-16/15*1/3-0.03,
           'figure.subplot.top'      : 1-16/15*5/48,
@@ -86,13 +86,41 @@ def config(
 
 def savefig(figure,name):
     import matplotlib.pyplot as plt
+    import navigation
+    name=name+".png"
     figure.legend(loc='upper left',bbox_to_anchor=(1-16/15*1/3,1-16/15*5/48))
+    navigation.check_path(name)
     figure.savefig(name)
     plt.close()
 
-def title(fig,TITLE):
-    # Deprecated
-    import matplotlib.pyplot as plt
-    fig.suptitle(TITLE, x=0.01, y=0.99, ha='left')
-    fig.legend(loc='upper left',bbox_to_anchor=(1-16/15*1/3,1-16/15*5/48))
-    return fig
+def pareto_plot(
+        INDEX,  # Failure names
+        DATA,   # Failure data
+        y_label,# data_units
+        PATH,   # File path
+        ):
+    import pandas as pd
+    name=PATH.split("/")[-1]
+    df=pd.DataFrame()
+    df["INDEX"] = INDEX
+    df["DATA"] = DATA
+    df.sort_values(by='DATA', ascending=False,inplace=True)
+    df['Cumulative Sum'] = df['DATA'].cumsum()
+    pareto=df["DATA"].sum()*0.8
+    df=df[df["Cumulative Sum"]<=pareto]
+    df=df.drop(columns="Cumulative Sum").reset_index(drop=True)
+    import vic_plot
+    fig, ax =vic_plot.config(
+        title=f"80% = {pareto:.1f} {y_label}"+(" | "+str(name))*(name!=None),
+        y_label=y_label
+        )
+    for i,row in df.iterrows():
+        ax.bar(row.iloc[0],row.iloc[1],label=row.iloc[0])
+    y_max = -(-pareto // 1)
+    y_ticks = [ y_max//4*i for i in range(1,5)]
+    y_ticks.append(y_max)
+    ax.set_yticks(y_ticks)
+    ax.set_xticks([])
+    vic_plot.savefig(fig,PATH)
+
+

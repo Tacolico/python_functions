@@ -55,72 +55,13 @@ def weibull_reliability(
                         ha='center', va='bottom' )
         plot_name="Reliability"+plot_name.replace(" | ","_").replace(" ","_")+"_Weibull.png"
         if path != None:
-            import vic_nav
-            vic_nav.new_folder(path)
+            import navigation
+            navigation.new_folder(path)
             vic_plot.savefig(fig,path+"/"+plot_name)
         if path == None:
             vic_plot.savefig(fig,plot_name)
     return op
 
-# Returns cumulative percentage and data table and plot
-def pareto_plot(
-        data_frame      = None,
-        col_fail_name   = None,
-        col_fail_data   = None,
-        plot            = True,
-        machine_name    = None,
-        path            = None,
-        ):
-    import pandas as pd
-    
-    # Cumulative percentage
-    df = data_frame.sort_values(by=col_fail_data, ascending=False).reset_index(drop=True)
-    df['∑%'] = df[col_fail_data].cumsum() / df[col_fail_data].sum() 
-    df['%'] = df[col_fail_data] / df[col_fail_data].sum() 
-    
-    # Plot
-    if plot==True:
-        plot_title="Pareto"+(" | "+str(machine_name))*(machine_name!=None)
-        save_title=plot_title.replace(" | ","_").replace(" ","_")
-        import matplotlib.pyplot as plt
-        import vic_plot
-        fig, ax = vic_plot.config(
-                               title=plot_title,
-                                y_label=col_fail_data,
-                                )
-        last_index=0
-        for i in range(len(df)):
-            index=(i+1)/len(df)
-            if df['∑%'].iloc[i] <= 0.85 and index <= 0.25:
-                ax.plot([index,index], [0,df[col_fail_data].iloc[i]],label=f"{df[col_fail_name].iloc[i]}")
-                last_index=i
-                last_name=index
-                continue
-            ax.plot([index,index], [0,df[col_fail_data].iloc[i]])
-
-        ax.set_xlim([0,1])
-        ax2 = ax.twinx()
-        ax2.plot([(i+1)/len(df) for i in range(len(df))], df['∑%'],markersize=0,color="k")
-        ax2.tick_params(axis='y', right=False, labelright=False)
-        ax2.set_ylim([0,1])
-        ax2.set_xlim([0,1])
-        ax2.annotate(f"{df['∑%'].iloc[last_index]*100:.0f}%", xy=(last_name, df['∑%'].iloc[last_index]),
-                        xytext=(0.5, df['∑%'].iloc[last_index]),
-                        arrowprops=dict( linestyle='--', arrowstyle='-'),
-                        ha='left', va='center' )
-        ax2.annotate(f'{last_name*100:.0f}%', xy=(last_name, df['∑%'].iloc[last_index]), 
-                        xytext=(last_name, 1),
-                        arrowprops=dict( linestyle='--', arrowstyle='-'),
-                        ha='center', va='top' )
-        if path == None:
-            vic_plot.savefig(fig,save_title+".png")
-            df[[col_fail_name,col_fail_data,"%",'∑%']].to_csv(save_title+".csv", index=False,float_format="%.2f")
-        if path != None:
-            import vic_nav
-            vic_nav.new_folder(path)
-            df[[col_fail_name,col_fail_data,"%",'∑%']].to_csv(path+"/"+save_title+".csv", index=False,float_format="%.2f")
-            vic_plot.savefig(fig,path+"/"+save_title+".png")
-    return df
 
 if __name__ =="__main__":
     import pandas as pd
@@ -157,13 +98,10 @@ Filtro para polvo,0.5,6,3,,,,,,
 Ganchos de rodillos superiores,2,5,10,,,,,,
 """
     df = pd.read_csv(StringIO(data_str))
-pareto_plot(
-        data_frame=df,
-        col_fail_data='Semana 29 [hr]',
-    col_fail_name="Efecto de la falla",
-    plot=True,
-    machine_name="La santa maria",
-    path="lol2",
+import vic_plot
+vic_plot.pareto_plot(
+    INDEX=df["Efecto de la falla"],
+    DATA=df['Semana 29 [hr]'],
+    y_label="[hr]",
+    PATH="FFF/lol2",
         )
-
-
