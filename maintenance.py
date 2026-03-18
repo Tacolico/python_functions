@@ -1,3 +1,13 @@
+def cost_benefits(
+    Ci, # Current cost of the machine
+    Ip, # Power index
+    Ic, # Criticality index (Current output/Possible output)*10 from 1 to 10
+    Pi, # Process index (Initial stage 1->final stage 10) (Index=(Stage-1)/(final-1)*10)
+    Kd  # Direct cost factor
+        ):
+    Ip = [3,8,15,30,50,80,110,150,200] #kw
+         [2,3, 4, 5, 6, 7,  8,  9, 10]
+
 # Returns operative reliability and plot
 def weibull_reliability(
         x_data      = None,

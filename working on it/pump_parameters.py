@@ -61,3 +61,22 @@ def overhaul_time(
         print("Derived formula: ",pow(2*(Pc+Cm+Q*m*k)/r/k,1/2))
         print("Commond formula: ",pow(2*(Pc+Cm+Cd)/r/k,1/2))
         return pow(2*(Cm+Cd)/r/k,1/2)
+
+def overhaul_time_v2(
+        ):
+    
+    #lineal 
+    #a=base operating cost
+    #b=deterioration
+    #T=Time
+    #integral=a*T+1/2*b*T**2
+
+
+
+
+
+
+
+
+
+

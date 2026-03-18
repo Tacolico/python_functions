@@ -1,7 +1,6 @@
 '''
 def fft_lh_plot(
-    path        = None,
-    name        = "Random wave file",
+    path        = "Random wave file",
     label       = "Random wave label",
     units       = "Un",
     signal      = None,
@@ -19,6 +18,7 @@ y_data=fft_lh_filter(
 x_data=[i*sample_rate for i in range(len(y_data))]
 '''
 def integrate_rotation(signal,sample_rate):
+
     integrated=[0 for i in range(len(signal))]
     for i in range(1,len(signal)):
         integrated[i]=(signal[i]+signal[i-1])/2*1/sample_rate+integrated[i-1]
@@ -43,6 +43,23 @@ def fft_lh_filter(
 
     signal_sample = len(signal)
     delta_time    = 1/sample_rate
+    signal_fft    = rfft(signal)
+    frequencies   = rfftfreq(signal_sample, d=delta_time)
+
+    filter_mask = np.ones_like(signal_fft, dtype=float)
+    if low_filter is not None:
+        filter_mask[frequencies <= low_filter] = 0
+    if high_filter is not None:
+        filter_mask[frequencies >= high_filter] = 0
+    filtered_fft  = signal_fft * filter_mask
+    filtered_freq = frequencies * filter_mask
+    filtered_signal = irfft(filtered_fft)
+    if plot==False:
+        return filtered_signal
+    if plot==True:
+        return [signal_fft,frequencies,filtered_signal]
+
+    '''
     duration      = signal_sample * delta_time
     if low_filter is not None:
         lfilter = int(duration * low_filter ) + 1*((duration * low_filter )%1 > 0)
@@ -52,19 +69,17 @@ def fft_lh_filter(
         hfilter = int(duration * high_filter) + 1*((duration * high_filter)%1 > 0)
     else:
         hfilter=None
-    signal_fft                  = rfft(signal)
-    frequencies                 = rfftfreq(signal_sample, d=delta_time)
     filter_fft                  = np.zeros_like(signal_fft)
     filter_fft[lfilter:hfilter] = 1  
     filtered_signal_fft         = signal_fft * filter_fft
     if plot==False:
         return irfft(filtered_signal_fft)
     if plot==True:
-        return filtered_signal_fft[lfilter:hfilter],frequencies[lfilter:hfilter]
+        return filtered_signal_fft[lfilter:hfilter],frequencies[lfilter:hfilter],irfft(filtered_signal_fft)
+    '''
 
 def fft_lh_plot(
-    path        = None,
-    name        = "Random wave file",
+    path        = "lol/Random wave file",
     label       = "Random wave label",
     units       = "Un",
     signal      = None,
@@ -73,28 +88,23 @@ def fft_lh_plot(
     high_filter = None,
     ):
     import matplotlib.pyplot as plt 
-    filtered_fft,freq = fft_lh_filter(signal,sample_rate,low_filter,high_filter,True)
+    import numpy as np
+    import vic_plot
+    [filtered_fft,freq,sig] = fft_lh_filter(signal,sample_rate,low_filter,high_filter,True)
     absolute_data    = np.abs(filtered_fft)/len(signal)*2
     top_five_indices = np.argpartition(absolute_data, -5)[-5:]
-    # Plot configuration
-    import vic_plot
-    fig,ax=vic_plot.config()
-    # 
+    
+    fig,ax=vic_plot.config(
+    title=f"FFT, sample frequency = {sample_rate} Hz",
+    x_label='Frequency [Hz]',
+    y_label=f'Amplitude [{units}]'
+            )
     ax.plot(freq,absolute_data,label=label,linewidth=0)
     ax.vlines(freq,[0 for i in freq],absolute_data)
     for index in top_five_indices:
         ax.annotate(f'{freq[index]:.0f}', (freq[index], absolute_data[index]), textcoords="offset points", xytext=(0,5), ha='center')
-    vice_plot.title(fig,f"FFT, sample frequency = {sample_rate} Hz") 
-    ax.set_xlabel('Frequency [Hz]')
-    ax.set_ylabel(f'Amplitude [{units}]')
-    if path != None:
-        # Navigate folders
-        import vic_nav
-        #
-        vic_nav.new_folder(path)
-        fig.savefig(path+"/"+name.lower().replace(" ","_")+'.png')
-    if path == None:
-        fig.savefig(name.lower().replace(" ","_")+'.png')
+    vic_plot.savefig(fig,path+'.png')
     plt.close('all')
     plt.rcdefaults()
+    return sig
 

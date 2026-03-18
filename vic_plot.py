@@ -94,10 +94,10 @@ def savefig(figure,name):
     plt.close()
 
 def pareto_plot(
-        INDEX,  # Failure names
-        DATA,   # Failure data
-        y_label,# data_units
-        PATH,   # File path
+        INDEX  = None, # Failure names
+        DATA   = None, # Failure data
+        y_label= "[data units]",
+        PATH   = "temp_pareto/function"
         ):
     import pandas as pd
     name=PATH.split("/")[-1]
@@ -123,4 +123,28 @@ def pareto_plot(
     ax.set_xticks([])
     vic_plot.savefig(fig,PATH)
 
-
+def fft_plot(
+    freqs       = None,
+    fft         = None,
+    path        = "temp_fft/function",
+    label       = "Random wave",
+    units       = "[Un]"
+    ):
+    import matplotlib.pyplot as plt 
+    import numpy as np
+    fft              = np.array(fft)
+    freqs            = np.array(freqs)
+    sample_rate      = (freqs[1] - freqs[0])*(len(fft)-1)*2
+    absolute_data    = np.abs(fft)/len(fft)*2
+    top_five_indices = np.argpartition(absolute_data, -5)[-5:]
+    fig,ax=config(
+    title=f"FFT, sample frequency = {sample_rate} Hz",
+    x_label='Frequency [Hz]',
+    y_label=f'Amplitude [{units}]'
+            )
+    ax.plot(freqs,absolute_data,label=label,linewidth=0)
+    ax.vlines(freqs,[0 for i in freqs],absolute_data)
+    for index in top_five_indices:
+        ax.annotate(f'{freqs[index]:.0f}', (freqs[index], absolute_data[index]), textcoords="offset points", xytext=(0,5), ha='center')
+    savefig(fig,path,axis=ax)
+    plt.close('all')
