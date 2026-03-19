@@ -1,17 +1,13 @@
-'''
-fig, ax =vic_plot.config(
-        title=None,
-        x_label=None,
-        y_label=None
-        )
-ax.plot(x_data,y_data,label="Label")
-vic_plot.savefig(fig,"Figure")
-'''
 def config(
         title=None,
         x_label=None,
         y_label=None
         ):
+    '''
+    returns fig, ax - figure and subplot of matplotlib
+    Autor:     Vicente
+    Reference: Matplotlib API
+    '''
     from cycler import cycler
     import matplotlib.pyplot as plt
     marker_color = [
@@ -85,6 +81,11 @@ def config(
     return fig, ax
 
 def savefig(figure,name):
+    '''
+    saves figure
+    Autor:     Vicente
+    Reference: Matplotlib API
+    '''
     import matplotlib.pyplot as plt
     import navigation
     name=name+".png"
@@ -93,12 +94,17 @@ def savefig(figure,name):
     figure.savefig(name)
     plt.close()
 
-def pareto_plot(
+def pareto(
         INDEX  = None, # Failure names
         DATA   = None, # Failure data
         y_label= "[data units]",
         PATH   = "temp_pareto/function"
         ):
+    """
+    Plots 80% of the most relevant data
+    Autor:     Vicente
+    Reference: Pareto
+    """
     import pandas as pd
     name=PATH.split("/")[-1]
     df=pd.DataFrame()
@@ -109,8 +115,7 @@ def pareto_plot(
     pareto=df["DATA"].sum()*0.8
     df=df[df["Cumulative Sum"]<=pareto]
     df=df.drop(columns="Cumulative Sum").reset_index(drop=True)
-    import vic_plot
-    fig, ax =vic_plot.config(
+    fig, ax = config(
         title=f"80% = {pareto:.1f} {y_label}"+(" | "+str(name))*(name!=None),
         y_label=y_label
         )
@@ -121,7 +126,7 @@ def pareto_plot(
     y_ticks.append(y_max)
     ax.set_yticks(y_ticks)
     ax.set_xticks([])
-    vic_plot.savefig(fig,PATH)
+    savefig(fig,PATH)
 
 def fft_plot(
     freqs       = None,
@@ -130,7 +135,11 @@ def fft_plot(
     label       = "Random wave",
     units       = "[Un]"
     ):
-    import matplotlib.pyplot as plt 
+    """
+    Plots Fourier frequency transform
+    Autor    : Vicente
+    Reference: ChatGPT
+    """
     import numpy as np
     fft              = np.array(fft)
     freqs            = np.array(freqs)
@@ -147,4 +156,3 @@ def fft_plot(
     for index in top_five_indices:
         ax.annotate(f'{freqs[index]:.0f}', (freqs[index], absolute_data[index]), textcoords="offset points", xytext=(0,5), ha='center')
     savefig(fig,path,axis=ax)
-    plt.close('all')

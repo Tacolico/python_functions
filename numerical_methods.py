@@ -1,9 +1,14 @@
 def gauss_legendre(
-        f, # Function f = lambda x: x**2
-        a, # Lower limit
-        b, # Upper limit
-        n  # Gauss points
+        f = lambda x: x**2, # Function
+        a = -1, # Lower limit
+        b =  1, # Upper limit
+        n =  3  # Gauss points
         ):
+    """
+    Gauss-Legendre integral
+    Autor:     Vicente
+    Reference: Numpy API
+    """
     import numpy as np
     from numpy.polynomial.legendre import leggauss
     x, w = leggauss(n)
@@ -16,6 +21,11 @@ def simpson(
         signal,     # Data to integrate
         sample_rate # Frequency [Hz]
         ):
+    """
+    Consecutive Simpson integrals for discrete data
+    Autor:     Vicente
+    Reference: Numerical analysis (Richard L. Burden) 2010
+    """
     import numpy as np
     dt = 1 / sample_rate
     n = len(signal)
@@ -39,6 +49,11 @@ def trapezoidal_even(
         signal,     # Data to integrate
         sample_rate # Frequency [Hz]
         ):
+    """
+    Consecutive trapezoidal integrals for discrete data
+    Autor:     Vicente
+    Reference: Numerical analysis (Richard L. Burden) 2010
+    """
     integrated=[0 for i in range(len(signal))]
     for i in range(1,len(signal)):
         integrated[i]=(signal[i]+signal[i-1])/2*1/sample_rate+integrated[i-1]
@@ -51,9 +66,14 @@ def trapezoidal_even(
     return integrated
 
 def trapezoidal(
-        y_data,     # Data to integrate
-        x_data      # Frequency [Hz]
+        x_data,    # Frequency [Hz]
+        y_data     # Data to integrate
         ):
+    """
+    Consecutive trapezoidal integrals for discrete data
+    Autor:     Vicente
+    Reference: Numerical analysis (Richard L. Burden) 2010
+    """
     if len(x_data)!=len(y_data):
         exit("Sampling error: missing x/y values")
     integrated=[0 for i in range(len(y_data))]
